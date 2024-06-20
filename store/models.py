@@ -1,6 +1,12 @@
 from django.db import models
 
 
+class Promotion(models.Model):
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
+    # field 'product_set' will be created where it will return all the products particular promotion is aplied to 
+
+
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -8,7 +14,7 @@ class Product(models.Model):
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)                       # Django will automatically stores the current datetime here
     collection = models.ForeignKey('Collection', on_delete=models.PROTECT)  # if you delete collection to NOT delete all the products in thet collection
-
+    promotions = models.ManyToManyField(Promotion, related_name='product_set')  # Django is going to create reverse relationship in the Promotion class
 
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
