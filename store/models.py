@@ -38,7 +38,7 @@ class Customer(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)                    # Always to be used for monetary values 9999.99
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)                    # Always to be used for monetary values 9999.99
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)                           # Django will automatically stores the current datetime here
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)        # if you delete collection to NOT delete all the products in thet collection
