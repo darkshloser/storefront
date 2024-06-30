@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -37,12 +38,19 @@ class Customer(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
-    unit_price = models.DecimalField(max_digits=6, decimal_places=2)                    # Always to be used for monetary values 9999.99
+    description = models.TextField(null=True, blank=True)
+    unit_price = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        validators=[MinValueValidator(1, message="Greater or equal to 1")])                    # Always to be used for monetary values 9999.99
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)                           # Django will automatically stores the current datetime here
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)        # if you delete collection to NOT delete all the products in thet collection
-    promotions = models.ManyToManyField(Promotion, related_name='product_set')  # Django is going to create reverse relationship in the Promotion class
+    promotions = models.ManyToManyField(
+        Promotion,
+        related_name='product_set',
+        blank=True
+    )  # Django is going to create reverse relationship in the Promotion class
 
 
 class Order(models.Model):
