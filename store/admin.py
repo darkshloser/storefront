@@ -7,7 +7,18 @@ from django.urls import reverse
 from .models import Promotion, Collection, Cart, Customer, Product, Order, OrderItem, Address, CartItem
 
 
-admin.site.register(Collection)
+@admin.register(Collection)
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'products_count']
+
+    @admin.display(ordering='products_count')
+    def products_count(self, collection: Collection):
+        return collection.products_count
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            products_count = Count('product')
+        )
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -35,9 +46,13 @@ class CustomerAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'placed_at', 'customer']
+
+
 admin.site.register(Promotion)
 admin.site.register(Cart)
-admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(Address)
 admin.site.register(CartItem)
