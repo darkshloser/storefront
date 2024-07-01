@@ -1,3 +1,4 @@
+from typing import Any
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -10,7 +11,13 @@ class Promotion(models.Model):
 
 class Collection(models.Model):
     title = models.CharField(max_length=255)
-    feature_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+')  # if we specify related_name='+' this tells Django not to create reverce relationship
+    feature_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+', blank=True)  # if we specify related_name='+' this tells Django not to create reverce relationship
+
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
 
 
 class Cart(models.Model):
@@ -51,6 +58,12 @@ class Product(models.Model):
         related_name='product_set',
         blank=True
     )  # Django is going to create reverse relationship in the Promotion class
+
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
 
 
 class Order(models.Model):
