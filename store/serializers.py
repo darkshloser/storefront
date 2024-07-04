@@ -11,11 +11,11 @@ from rest_framework import serializers
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'title', 'unit_price', 'collection']  # by default Model serializer use primary key related fields
+        fields = ['id', 'title', 'unit_price', 'price_with_tax','collection']  # by default Model serializer use primary key related fields
     # id = serializers.IntegerField()
     # title = serializers.CharField(max_length=255)
     # price = serializers.DecimalField(max_digits=6, decimal_places=2, source='unit_price')
-    # price_with_tax = serializers.SerializerMethodField(method_name='calculate_tax')
+    price_with_tax = serializers.SerializerMethodField(method_name='calculate_tax')
     # # collection = CollectionSerializer()
     # collection = serializers.HyperlinkedRelatedField(
     #     queryset=Collection.objects.all(),
