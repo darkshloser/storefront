@@ -24,3 +24,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def calculate_tax(self, product: Product) -> Decimal:
         return product.unit_price * Decimal(1.1)
+    
+    # We can override 'validate' method in order to have a custom validation NOT only the one from our model
+    # def validate(self, data):
+    #     if data['password'] != data['confirm_password']:
+    #         return serializers.ValidationError('Passwords do not match!')
+    #     return data
+        
