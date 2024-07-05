@@ -58,7 +58,7 @@ class Product(models.Model):
         validators=[MinValueValidator(1, message="Greater or equal to 1")])                    # Always to be used for monetary values 9999.99
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)                           # Django will automatically stores the current datetime here
-    collection = models.ForeignKey(Collection, on_delete=models.PROTECT)        # if you delete collection to NOT delete all the products in thet collection
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT, related_name='products')        # if you delete collection to NOT delete all the products in thet collection
     promotions = models.ManyToManyField(
         Promotion,
         related_name='product_set',
