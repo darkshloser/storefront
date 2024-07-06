@@ -1,29 +1,24 @@
 from django.shortcuts import get_object_or_404
 from django.db.models.aggregates import Count
-from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView
 from rest_framework import status
 from .models import Product, Collection
 from .serializers import ProductSerializer, CollectionSerializer
 
 
-@api_view(['GET', 'POST'])
-def product_list(request):
-    if request.method == 'GET':
-        queryset = Product.objects.all()
-        serializer = ProductSerializer(queryset, many=True, context={'request': request})
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = ProductSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # if serializer.is_valid():
-        #     serializer.validated_data
-        #     return Response("ok")
-        # else:
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ProductList(ListCreateAPIView):
+    def get_queryset(self):
+        return Product.objects.select_related('collection').all()
+    
+    def get_serializer_class(self):
+        return ProductSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
