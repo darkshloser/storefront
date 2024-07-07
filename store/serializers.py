@@ -1,6 +1,6 @@
 from decimal import Decimal
-from store.models import Product, Collection, Review
 from rest_framework import serializers
+from .models import Product, Collection, Review, Cart, CartItem
 
 
 # class CollectionSerializer(serializers.Serializer):
@@ -61,7 +61,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['id', 'date', 'name', 'description', 'product']
 
 
+class CartSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)              # If we don't want to define it when we create a new record we create this line with 'read_only=True'
+    created_at = serializers.DateTimeField(read_only=True)
 
+    class Meta:
+        model = Cart
+        fields = ['id', 'created_at']
 
 
 
