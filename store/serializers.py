@@ -1,5 +1,5 @@
 from decimal import Decimal
-from store.models import Product, Collection
+from store.models import Product, Collection, Review
 from rest_framework import serializers
 
 
@@ -55,9 +55,10 @@ class CollectionSerializer(serializers.ModelSerializer):
     products_count = serializers.IntegerField(read_only=True)  # We can define read-only fields which are not used for creation or update
 
 
-
-
-
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'date', 'name', 'description', 'product']
 
 
 

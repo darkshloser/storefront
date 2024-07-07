@@ -1,5 +1,5 @@
 from django.urls import path, include
-from rest_framework.routers import SimpleRouter, DefaultRouter
+from rest_framework_nested import routers
 from . import views
 
 # If we use DefaultRouter instead of SimpleRouter we'll have also response for ...../store/ 
@@ -12,12 +12,17 @@ from . import views
 # we'll get all the data in JSON format 
 
 
-router = DefaultRouter()
+router = routers.DefaultRouter()
 router.register('products', views.ProductViewSet)  # first argument is the value we're using for the url and the ssecond is  
 router.register('collections', views.CollectionViewSet)
 
 
+products_router = routers.NestedDefaultRouter(router, 'products', lookup='product')
+products_router.register('reviews', views.ReviewViewSet, basename='product-reviews')
+
+
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('', include(products_router.urls)),
 ]
 
